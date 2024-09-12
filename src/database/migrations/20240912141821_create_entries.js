@@ -10,7 +10,7 @@ exports.up = function (knex) {
     table.string("operation").notNullable(); // credit | debit
     table.integer("value").notNullable();
 
-    table.timestamps();
+    table.timestamps(true, true);
   });
 };
 
