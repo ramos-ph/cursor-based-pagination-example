@@ -1,0 +1,16 @@
+{
+  "name": "cursor-based-pagination-example",
+  "version": "0.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/server.js"
+  },
+  "author": "Pedro Henrique <pedro.henrique@codeminer42.com>",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.20.0",
+    "graphql": "^16.9.0",
+    "graphql-http": "^1.22.1",
+    "ruru": "^2.0.0-beta.13"
+  }
+}
