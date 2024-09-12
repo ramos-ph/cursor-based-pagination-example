@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "node src/server.js"
+    "start": "node src/server.js",
+    "db:migrate": "knex migrate:latest"
   },
   "author": "Pedro Henrique <pedro.henrique@codeminer42.com>",
   "license": "MIT",
