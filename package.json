@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "node src/server.js",
+    "start": "nodemon src/server.js",
     "db:migrate": "knex migrate:latest"
   },
   "author": "Pedro Henrique <pedro.henrique@codeminer42.com>",
@@ -15,5 +15,8 @@
     "knex": "^3.1.0",
     "ruru": "^2.0.0-beta.13",
     "sqlite3": "^5.1.7"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
   }
 }
