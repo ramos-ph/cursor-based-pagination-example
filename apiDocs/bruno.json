@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "cursor-based-pagination-example",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}

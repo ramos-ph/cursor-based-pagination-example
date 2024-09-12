@@ -1,0 +1,19 @@
+meta {
+  name: Create Entry
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://localhost:3000/entries
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "value": 2000,
+    "description": "Entry",
+    "operation": "debit"
+  }
+}

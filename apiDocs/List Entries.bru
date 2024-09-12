@@ -1,0 +1,16 @@
+meta {
+  name: List Entries
+  type: http
+  seq: 1
+}
+
+get {
+  url: http://localhost:3000/entries?page=1&size=5
+  body: none
+  auth: none
+}
+
+params:query {
+  page: 1
+  size: 5
+}
