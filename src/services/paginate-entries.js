@@ -12,7 +12,11 @@ exports.paginateEntries = async ({ first, last, before, after } = {}) => {
   const [{ count }] = await knex("entries").count({ count: "*" });
 
   return {
-    data: entries,
+    data: entries.map((entry) => ({
+      ...entry,
+      createdAt: entry.created_at.toString(),
+      updatedAt: entry.updated_at.toString(),
+    })),
     total_records: count,
   };
 };
