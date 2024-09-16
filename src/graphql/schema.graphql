@@ -30,5 +30,10 @@ type EntryConnection {
 }
 
 type Query {
-  entries: EntryConnection
+  entries(
+    first: Int,
+    last: Int,
+    before: String,
+    after: String
+  ): EntryConnection
 }
