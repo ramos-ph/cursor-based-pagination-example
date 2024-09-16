@@ -6,16 +6,18 @@ const root = {
   async entries({ first, last, before, after }) {
     const { data: entries, total_records } = await paginateEntries();
 
+    const edges = entries.map((entry) => ({
+      node: entry,
+      cursor: entry.id,
+    }));
+
     return {
-      edges: entries.map((entry) => ({
-        node: entry,
-        cursor: entry.id,
-      })),
+      edges: edges,
       pageInfo: {
-        startCursor: "1",
-        endCursor: "10",
-        hasNextPage: false,
-        hasPreviousPage: false,
+        startCursor: edges.at(0).cursor,
+        endCursor: edges.at(-1).cursor,
+        hasNextPage: edges.length >= total_records,
+        hasPreviousPage: !!before,
       },
       totalCount: total_records,
     };
