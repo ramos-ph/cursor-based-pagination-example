@@ -1,7 +1,13 @@
 const knex = require("../database/knex");
 
 exports.paginateEntries = async ({ first, last, before, after } = {}) => {
-  const entries = await knex("entries").select("*");
+  const query = knex("entries").limit(first).select("*");
+
+  if (after) {
+    query.where("id", ">", after);
+  }
+
+  const entries = await query;
 
   const [{ count }] = await knex("entries").count({ count: "*" });
 

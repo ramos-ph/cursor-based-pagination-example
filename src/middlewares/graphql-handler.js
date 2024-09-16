@@ -4,7 +4,12 @@ const { paginateEntries } = require("../services/paginate-entries");
 
 const root = {
   async entries({ first, last, before, after }) {
-    const { data: entries, total_records } = await paginateEntries();
+    const { data: entries, total_records } = await paginateEntries({
+      first,
+      last,
+      before,
+      after,
+    });
 
     const edges = entries.map((entry) => ({
       node: entry,
@@ -16,8 +21,8 @@ const root = {
       pageInfo: {
         startCursor: edges.at(0).cursor,
         endCursor: edges.at(-1).cursor,
-        hasNextPage: edges.length >= total_records,
-        hasPreviousPage: !!before,
+        hasNextPage: first < total_records,
+        hasPreviousPage: !!after,
       },
       totalCount: total_records,
     };
