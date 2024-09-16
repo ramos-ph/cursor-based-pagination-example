@@ -1,19 +1,13 @@
 const express = require("express");
 const { createHandler } = require("graphql-http/lib/use/express");
-const { buildSchema } = require("graphql");
 const { ruruHTML } = require("ruru/server");
 const router = require("./routes");
+const schema = require("./graphql/schema");
 
 const server = express();
 
-const schema = buildSchema(`
-  type Query {
-    hello: String
-  }
-`);
-
 const root = {
-  hello() {
+  entries() {
     return "Hello, World!";
   },
 };

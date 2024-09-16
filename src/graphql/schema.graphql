@@ -1,0 +1,11 @@
+type Entry {
+  description: String
+  operation: String
+  value: Int
+  createdAt: String
+  updatedAt: String
+}
+
+type Query {
+  entries: [Entry]
+}
