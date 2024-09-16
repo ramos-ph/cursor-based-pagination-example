@@ -1,22 +1,12 @@
 const knex = require("../database/knex");
+const { listEntries } = require("../services/list-entries");
 
 exports.index = async (req, res) => {
   const { page = 1, size = 10 } = req.query;
 
-  const entries = await knex("entries")
-    .offset(size * (page - 1))
-    .select("*")
-    .limit(size)
-    .orderBy("id", "desc");
+  const entries = await listEntries({ page, size });
 
-  const [{ count }] = await knex("entries").count({ count: "*" });
-
-  return res.send({
-    data: entries,
-    page_number: Number(page),
-    size: Number(size),
-    total_records: count,
-  });
+  return res.send(entries);
 };
 
 exports.store = async (req, res) => {
