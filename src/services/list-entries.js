@@ -1,6 +1,6 @@
 const knex = require("../database/knex");
 
-exports.listEntries = async ({ page = 1, size = 10 }) => {
+exports.listEntries = async ({ page = 1, size = 10 } = {}) => {
   const entries = await knex("entries")
     .offset(size * (page - 1))
     .select("*")

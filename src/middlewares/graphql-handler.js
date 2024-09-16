@@ -1,9 +1,11 @@
 const { createHandler } = require("graphql-http/lib/use/express");
 const schema = require("../graphql/schema");
+const { listEntries } = require("../services/list-entries");
 
 const root = {
-  entries() {
-    return "Hello, World!";
+  async entries() {
+    const entries = await listEntries();
+    return entries.data;
   },
 };
 
