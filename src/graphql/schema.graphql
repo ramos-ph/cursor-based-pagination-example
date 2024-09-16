@@ -31,7 +31,7 @@ type EntryConnection {
 
 type Query {
   entries(
-    first: Int,
+    first: Int = 10,
     last: Int,
     before: String,
     after: String
