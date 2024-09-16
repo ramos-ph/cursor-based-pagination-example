@@ -1,4 +1,16 @@
-type Entry {
+type PageInfo {
+  hasPreviousPage: Boolean!
+  hasNextPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
+
+interface Node {
+  id: String!
+}
+
+type Entry implements Node {
+  id: String!
   description: String
   operation: String
   value: Int
@@ -6,6 +18,17 @@ type Entry {
   updatedAt: String
 }
 
+type EntryEdge {
+  node: Entry!
+  cursor: String!
+}
+
+type EntryConnection {
+  edges: [EntryEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
 type Query {
-  entries: [Entry]
+  entries: EntryConnection
 }
