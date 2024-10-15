@@ -11,6 +11,7 @@ This project is an example repository for studying purposes.
 ```
 $ npm install
 $ npm run db:migrate
+$ npm run db:seed
 ```
 
 ## Running the app
