@@ -9,7 +9,7 @@ const root = {
     if (last && last < 0) 
       throw new Error('Argument `last` cannot be negative.')
     
-    const { data: entries, total_records } = await paginateEntries({
+    const { data: entries, totalRecords } = await paginateEntries({
       first,
       last,
       before,
@@ -26,10 +26,10 @@ const root = {
       pageInfo: {
         startCursor: edges.at(0)?.cursor || null,
         endCursor: edges.at(-1)?.cursor || null,
-        hasNextPage: first < total_records,
+        hasNextPage: edges.length >= first,
         hasPreviousPage: !!after,
       },
-      totalCount: total_records,
+      totalCount: totalRecords,
     };
   },
 };
