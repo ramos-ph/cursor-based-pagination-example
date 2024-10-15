@@ -19,7 +19,7 @@ exports.paginateEntries = async ({ first, last, before, after } = {}) => {
     cursor: entry.id,
   }));
 
-  const [{ count: totalRecords }] = await knex("entries").count({ count: "*" });
+  const [{ totalCount }] = await knex("entries").count({ totalCount: "*" });
 
   return {
     edges: edges,
@@ -29,6 +29,6 @@ exports.paginateEntries = async ({ first, last, before, after } = {}) => {
       hasNextPage: edges.length >= first,
       hasPreviousPage: !!after,
     },
-    totalCount: totalRecords,
+    totalCount: totalCount,
   };
 };
