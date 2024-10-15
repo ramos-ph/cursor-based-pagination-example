@@ -23,6 +23,6 @@ The server will be running at http://localhost:3000/.
 
 ## API
 
-Refer to http://localhost:3000/graphql to use the GraphQL client.
+Refer to http://localhost:3000/ to use the GraphQL UI.
 
 If you want to make HTTP requests, import the `apiDocs/` directory on [Bruno](https://www.usebruno.com/).
