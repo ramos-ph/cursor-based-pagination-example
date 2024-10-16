@@ -15,7 +15,11 @@ exports.paginateEntries = async ({ first, last, before, after } = {}) => {
   const entries = await query;
 
   const edges = entries.map((entry) => ({
-    node: entry,
+    node: {
+      ...entry,
+      createdAt: entry.created_at,
+      updatedAt: entry.updated_at
+    },
     cursor: entry.id,
   }));
 
