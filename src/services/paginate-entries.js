@@ -3,9 +3,8 @@ const knex = require("../database/knex");
 const DEFAULT_PAGE_SIZE = 10;
 
 exports.paginateEntries = async ({ first, after, last, before }) => {
-  if (first && first < 0)
-    throw new Error("Argument `first` cannot be negative.");
-  if (last && last < 0) throw new Error("Argument `last` cannot be negative.");
+  if (first < 0) throw new Error("Argument `first` cannot be negative.");
+  if (last < 0) throw new Error("Argument `last` cannot be negative.");
 
   const entries = await getEntries({ first, after, last, before });
 
