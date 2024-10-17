@@ -15,8 +15,8 @@ exports.paginateEntries = async ({ first, after, last, before }) => {
     pageInfo: {
       startCursor: startCursor(edges),
       endCursor: endCursor(edges),
-      hasNextPage: false,
-      hasPreviousPage: false,
+      hasNextPage: hasNextPage({ entries, first, after, last, before }),
+      hasPreviousPage: hasPreviousPage({ entries, first, after, last, before }),
     },
     totalCount: entriesCount,
   };
@@ -64,4 +64,12 @@ function startCursor(edges) {
 function endCursor(edges) {
   const edge = edges.at(-1);
   return edge?.cursor || null;
+}
+
+function hasNextPage({ entries, first, after, last, before }) {
+  return false;
+}
+
+function hasPreviousPage({ entries, first, after, last, before }) {
+  return false;
 }
