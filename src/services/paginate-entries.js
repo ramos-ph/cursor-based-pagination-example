@@ -7,12 +7,7 @@ exports.paginateEntries = async ({ first, after, last, before }) => {
   if (last < 0) throw new Error("Argument `last` cannot be negative.");
 
   const entries = await getEntries({ first, after, last, before });
-
-  const edges = entries.map((entry) => ({
-    node: entry,
-    cursor: entry.id,
-  }));
-
+  const edges = edgesToReturn({ entries, first, last });
   const entriesCount = await countEntries();
 
   return {
@@ -34,13 +29,26 @@ async function getEntries({ first, after, last, before }) {
     "updated_at as updatedAt"
   );
 
-  query.limit(first || last || DEFAULT_PAGE_SIZE);
+  query.limit((first || last || DEFAULT_PAGE_SIZE) + 1);
   if (last) query.orderBy("id", "desc");
   if (after) query.where("id", ">", after);
   if (before) query.where("id", "<", before);
 
   const entries = await query;
   return entries;
+}
+
+function edgesToReturn({ entries, first, last }) {
+  const edges = entries.map((entry) => ({
+    node: entry,
+    cursor: entry.id,
+  }));
+
+  if (edges.length > (first || last)) {
+    return edges.slice(0, -1);
+  }
+
+  return edges;
 }
 
 async function countEntries() {
