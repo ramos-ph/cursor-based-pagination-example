@@ -1,19 +1,9 @@
 const knex = require("../database/knex");
 
-exports.paginateEntries = async ({ first, last, before, after } = {}) => {
-  if (first && first < 0)
-    throw new Error("Argument `first` cannot be negative.");
+exports.paginateEntries = async ({ first, after, last, before }) => {
   if (last && last < 0) throw new Error("Argument `last` cannot be negative.");
 
-  const query = knex("entries")
-    .limit(first)
-    .select("*", "created_at as createdAt", "updated_at as updatedAt");
-
-  if (after) {
-    query.where("id", ">", after);
-  }
-
-  const entries = await query;
+  const entries = await getEntries({ first, after, last, before });
 
   const edges = entries.map((entry) => ({
     node: entry,
@@ -33,6 +23,23 @@ exports.paginateEntries = async ({ first, last, before, after } = {}) => {
     totalCount: entriesCount,
   };
 };
+
+async function getEntries({ first, after, last, before }) {
+  if (first && first < 0)
+    throw new Error("Argument `first` cannot be negative.");
+
+  const query = knex("entries")
+    .limit(first)
+    .select("*", "created_at as createdAt", "updated_at as updatedAt");
+
+  if (after) {
+    query.where("id", ">", after);
+  }
+
+  const entries = await query;
+
+  return entries;
+}
 
 async function countEntries() {
   const [{ count }] = await knex("entries").count({ count: "*" });
