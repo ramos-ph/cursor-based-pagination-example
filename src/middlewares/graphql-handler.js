@@ -3,7 +3,7 @@ const schema = require("../graphql/schema");
 const { paginateEntries } = require("../services/paginate-entries");
 
 const root = {
-  async entries({ first = 10, last, before, after }) {
+  async entries({ first, last, before, after }) {
     return await paginateEntries({
       first,
       last,
