@@ -5,7 +5,9 @@ exports.paginateEntries = async ({ first, last, before, after } = {}) => {
     throw new Error("Argument `first` cannot be negative.");
   if (last && last < 0) throw new Error("Argument `last` cannot be negative.");
 
-  const query = knex("entries").limit(first).select("*");
+  const query = knex("entries")
+    .limit(first)
+    .select("*", "created_at as createdAt", "updated_at as updatedAt");
 
   if (after) {
     query.where("id", ">", after);
@@ -14,11 +16,7 @@ exports.paginateEntries = async ({ first, last, before, after } = {}) => {
   const entries = await query;
 
   const edges = entries.map((entry) => ({
-    node: {
-      ...entry,
-      createdAt: entry.created_at,
-      updatedAt: entry.updated_at,
-    },
+    node: entry,
     cursor: entry.id,
   }));
 
