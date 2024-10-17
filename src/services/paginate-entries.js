@@ -18,8 +18,8 @@ exports.paginateEntries = async ({ first, after, last, before }) => {
   return {
     edges: edges,
     pageInfo: {
-      startCursor: edges.at(0)?.cursor || null,
-      endCursor: edges.at(-1)?.cursor || null,
+      startCursor: startCursor(edges),
+      endCursor: endCursor(edges),
       hasNextPage: edges.length >= first,
       hasPreviousPage: !!after,
     },
@@ -46,4 +46,16 @@ async function getEntries({ first, after, last, before }) {
 async function countEntries() {
   const [{ count }] = await knex("entries").count({ count: "*" });
   return count;
+}
+
+function startCursor(edges) {
+  const edge = edges.at(0);
+  if (!edge) return null;
+  return edge.cursor;
+}
+
+function endCursor(edges) {
+  const edge = edges.at(-1);
+  if (!edge) return null;
+  return edge.cursor;
 }
