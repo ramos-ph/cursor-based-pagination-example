@@ -20,8 +20,8 @@ exports.paginateEntries = async ({ first, after, last, before }) => {
     pageInfo: {
       startCursor: startCursor(edges),
       endCursor: endCursor(edges),
-      hasNextPage: edges.length >= first,
-      hasPreviousPage: !!after,
+      hasNextPage: false,
+      hasPreviousPage: false,
     },
     totalCount: entriesCount,
   };
@@ -34,7 +34,7 @@ async function getEntries({ first, after, last, before }) {
     "updated_at as updatedAt"
   );
 
-  query.limit((first || last || DEFAULT_PAGE_SIZE) + 1);
+  query.limit(first || last || DEFAULT_PAGE_SIZE);
   if (last) query.orderBy("id", "desc");
   if (after) query.where("id", ">", after);
   if (before) query.where("id", "<", before);
