@@ -36,21 +36,11 @@ async function getEntries({ first, after, last, before }) {
   );
 
   query.limit((first || last || DEFAULT_PAGE_SIZE) + 1);
-
-  if (last) {
-    query.orderBy("id", "desc");
-  }
-
-  if (after) {
-    query.where("id", ">", after);
-  }
-
-  if (before) {
-    query.where("id", "<", before);
-  }
+  if (last) query.orderBy("id", "desc");
+  if (after) query.where("id", ">", after);
+  if (before) query.where("id", "<", before);
 
   const entries = await query;
-
   return entries;
 }
 
