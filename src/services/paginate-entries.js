@@ -29,7 +29,7 @@ async function getEntries({ first, after, last, before }) {
     "updated_at as updatedAt"
   );
 
-  query.limit((first || last || DEFAULT_PAGE_SIZE) + 1);
+  query.limit(first || last || DEFAULT_PAGE_SIZE);
   if (last) query.orderBy("id", "desc");
   if (after) query.where("id", ">", after);
   if (before) query.where("id", "<", before);
@@ -39,16 +39,10 @@ async function getEntries({ first, after, last, before }) {
 }
 
 function edgesToReturn({ entries, first, last }) {
-  const edges = entries.map((entry) => ({
+  return entries.map((entry) => ({
     node: entry,
     cursor: entry.id,
   }));
-
-  if (edges.length > (first || last)) {
-    return edges.slice(0, -1);
-  }
-
-  return edges;
 }
 
 async function countEntries() {
