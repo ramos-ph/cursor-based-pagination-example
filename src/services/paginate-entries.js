@@ -50,12 +50,10 @@ async function countEntries() {
 
 function startCursor(edges) {
   const edge = edges.at(0);
-  if (!edge) return null;
-  return edge.cursor;
+  return edge?.cursor || null;
 }
 
 function endCursor(edges) {
   const edge = edges.at(-1);
-  if (!edge) return null;
-  return edge.cursor;
+  return edge?.cursor || null;
 }
