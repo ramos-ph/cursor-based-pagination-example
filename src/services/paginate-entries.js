@@ -15,8 +15,8 @@ exports.paginateEntries = async ({ first, after, last, before }) => {
     pageInfo: {
       startCursor: startCursor(edges),
       endCursor: endCursor(edges),
-      hasNextPage: hasNextPage({ entries, first, after, last, before }),
-      hasPreviousPage: hasPreviousPage({ entries, first, after, last, before }),
+      hasNextPage: await hasNextPage(edges),
+      hasPreviousPage: await hasPreviousPage(edges),
     },
     totalCount: entriesCount,
   };
@@ -60,10 +60,22 @@ function endCursor(edges) {
   return edge?.cursor || null;
 }
 
-function hasNextPage({ entries, first, after, last, before }) {
-  return false;
+async function hasNextPage(edges) {
+  const result = await knex.raw(
+    `SELECT CASE WHEN EXISTS (SELECT * FROM ENTRIES WHERE id > ${endCursor(
+      edges
+    )}) THEN TRUE ELSE FALSE END AS has_next;`
+  );
+
+  return result[0].has_next;
 }
 
-function hasPreviousPage({ entries, first, after, last, before }) {
-  return false;
+async function hasPreviousPage(edges) {
+  const result = await knex.raw(
+    `SELECT CASE WHEN EXISTS (SELECT * FROM ENTRIES WHERE id < ${startCursor(
+      edges
+    )}) THEN TRUE ELSE FALSE END AS has_previous;`
+  );
+
+  return result[0].has_previous;
 }
