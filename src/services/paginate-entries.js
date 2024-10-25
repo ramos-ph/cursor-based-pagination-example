@@ -1,4 +1,5 @@
 const knex = require("../database/knex");
+const cursor = require("../utils/cursor-encoder");
 
 const DEFAULT_PAGE_SIZE = 10;
 
@@ -15,24 +16,21 @@ exports.paginateEntries = async ({ first, after, last, before }) => {
     pageInfo: {
       startCursor: startCursor(edges),
       endCursor: endCursor(edges),
-      hasNextPage: await hasNextPage(edges),
-      hasPreviousPage: await hasPreviousPage(edges),
+      hasNextPage: false,
+      hasPreviousPage: false,
     },
     totalCount: entriesCount,
   };
 };
 
 async function getEntries({ first, after, last, before }) {
-  const query = knex("entries").select(
-    "*",
-    "created_at as createdAt",
-    "updated_at as updatedAt"
-  );
+  const query = knex("entries")
+    .select("*")
+    .limit(first || last || DEFAULT_PAGE_SIZE);
 
-  query.limit(first || last || DEFAULT_PAGE_SIZE);
   if (last) query.orderBy("id", "desc");
-  if (after) query.where("id", ">", after);
-  if (before) query.where("id", "<", before);
+  if (after) query.where("id", ">", cursor.decode(after));
+  if (before) query.where("id", "<", cursor.decode(before));
 
   const entries = await query;
   if (last) entries.reverse();
@@ -41,8 +39,12 @@ async function getEntries({ first, after, last, before }) {
 
 function edgesToReturn({ entries, first, last }) {
   return entries.map((entry) => ({
-    node: entry,
-    cursor: entry.id,
+    node: {
+      ...entry,
+      createdAt: entry.created_at,
+      updatedAt: entry.updated_at,
+    },
+    cursor: cursor.encode(entry.id),
   }));
 }
 
@@ -59,24 +61,4 @@ function startCursor(edges) {
 function endCursor(edges) {
   const edge = edges.at(-1);
   return edge?.cursor || null;
-}
-
-async function hasNextPage(edges) {
-  const result = await knex.raw(
-    `SELECT CASE WHEN EXISTS (SELECT * FROM ENTRIES WHERE id > ${endCursor(
-      edges
-    )}) THEN TRUE ELSE FALSE END AS has_next;`
-  );
-
-  return result[0].has_next;
-}
-
-async function hasPreviousPage(edges) {
-  const result = await knex.raw(
-    `SELECT CASE WHEN EXISTS (SELECT * FROM ENTRIES WHERE id < ${startCursor(
-      edges
-    )}) THEN TRUE ELSE FALSE END AS has_previous;`
-  );
-
-  return result[0].has_previous;
 }
