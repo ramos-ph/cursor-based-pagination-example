@@ -1,4 +1,4 @@
-const PREFIX = `cursor_`;
+const PREFIX = "cursor_";
 
 exports.encode = (text) => {
   return Buffer.from(PREFIX + text, "utf-8").toString("base64");
