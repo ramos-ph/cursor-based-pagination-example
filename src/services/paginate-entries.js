@@ -28,11 +28,10 @@ async function getEntries({ first, after, last, before }) {
     .select("*")
     .limit(first || last || DEFAULT_PAGE_SIZE);
 
-  if (first) query.orderBy("id", "desc");
-  if (after) query.where("id", "<", cursor.decode(after));
+  if (after) query.where("id", ">", cursor.decode(after));
 
-  if (last) query.orderBy("id", "asc");
-  if (before) query.where("id", ">", cursor.decode(before));
+  if (last) query.orderBy("id", "desc");
+  if (before) query.where("id", "<", cursor.decode(before));
 
   const entries = await query;
   if (last) entries.reverse();
